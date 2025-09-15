@@ -35,7 +35,7 @@ Se debe descargar IntelliJ IDEA Community Edition desde https://www.jetbrains.co
 
 **ChromeDriver**
 
-1, Verificar la versión de Chrome instalada (Menú → Ayuda → Acerca de Google Chrome)
+1. Verificar la versión de Chrome instalada (Menú → Ayuda → Acerca de Google Chrome)
 2. Descarga ChromeDriver correspondiente a tu versión desde https://chromedriver.chromium.org/downloads
 3. Extrae el archivo y coloca chromedriver.exe en una carpeta de tu preferencia
 4. Agrega la ruta de ChromeDriver al PATH del sistema o configura la ruta directamente en tu proyecto de pruebas
