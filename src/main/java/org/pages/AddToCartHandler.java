@@ -21,7 +21,6 @@ public class AddToCartHandler {
         try {
             System.out.println("🛒 Intentando añadir productos al carrito...");
 
-            // Esperar a que la página de productos esté completamente cargada
             wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.className("inventory_list")
             ));
@@ -36,7 +35,6 @@ public class AddToCartHandler {
 
             Thread.sleep(500);
 
-            // Esperar y hacer clic en el segundo producto
             WebElement secondProduct = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("(//button[contains(text(),'Add to cart')])[2]")
             ));

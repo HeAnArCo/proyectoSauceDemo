@@ -48,12 +48,12 @@ public class ShoppingCartHandler {
         try {
             System.out.println("Llenando información de checkout...");
 
-            // Esperar a que el formulario esté visible
+
             wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.className("checkout_info")
             ));
 
-            // Llenar campo de nombre
+
             WebElement firstNameField = wait.until(ExpectedConditions.elementToBeClickable(
                     By.id("first-name")
             ));
@@ -61,19 +61,18 @@ public class ShoppingCartHandler {
             firstNameField.sendKeys(firstName);
             System.out.println("Nombre completado: " + firstName);
 
-            // Llenar campo de apellido
             WebElement lastNameField = driver.findElement(By.id("last-name"));
             lastNameField.clear();
             lastNameField.sendKeys(lastName);
             System.out.println("Apellido completado: " + lastName);
 
-            // Llenar campo de código postal
+
             WebElement postalCodeField = driver.findElement(By.id("postal-code"));
             postalCodeField.clear();
             postalCodeField.sendKeys(postalCode);
             System.out.println("Código postal completado: " + postalCode);
 
-            // Pequeña pausa para visualizar
+
             Thread.sleep(500);
 
         } catch (Exception e) {
@@ -85,7 +84,7 @@ public class ShoppingCartHandler {
         try {
             System.out.println("Continuando a resumen de compra...");
 
-            // Hacer clic en el botón continuar
+
             WebElement continueBtn = wait.until(ExpectedConditions.elementToBeClickable(
                     By.id("continue")
             ));
@@ -147,11 +146,9 @@ public class ShoppingCartHandler {
             continueToOverview();
             Thread.sleep(2000);
 
-            // Paso 5: Finalizar compra
             finishCheckout();
             Thread.sleep(2000);
 
-            // Paso 6: Verificar éxito
             if (verifyOrderCompletion()) {
                 System.out.println("🎉 ¡Proceso de compra completado exitosamente!");
             } else {

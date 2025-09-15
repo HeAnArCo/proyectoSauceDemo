@@ -19,9 +19,7 @@ public class PopupHandler {
         try {
             System.out.println("🔧 Intentando cerrar popup de forma segura...");
 
-            // Primero intentar con esperas explícitas para elementos comunes
             try {
-                // Esperar y hacer clic en botones comunes de aceptar
                 String[] buttonSelectors = {
                         "button:contains('Aceptar'), button:contains('Accept')",
                         "button:contains('OK'), button:contains('Ok')",
@@ -44,7 +42,6 @@ public class PopupHandler {
                         Object result = ((JavascriptExecutor) driver).executeScript(script);
                         System.out.println("Resultado: " + result);
 
-                        // Pequeña pausa entre intentos
                         Thread.sleep(300);
                     } catch (Exception e) {
                         System.out.println("Intento con selector " + selector + " falló: " + e.getMessage());
@@ -54,7 +51,6 @@ public class PopupHandler {
                 System.out.println("Error en intento de botones: " + e.getMessage());
             }
 
-            // Si aún no se ha cerrado, intentar enfoque más directo
             try {
                 String directScript =
                         "// Ocultar elementos de popup comunes\n" +
@@ -82,7 +78,6 @@ public class PopupHandler {
             System.out.println("PopupHandler finalizado (método seguro)");
         } catch (Exception e) {
             System.out.println("⚠Error crítico en PopupHandler: " + e.getMessage());
-            // No relanzar la excepción para evitar que detenga el flujo
         }
     }
 }
