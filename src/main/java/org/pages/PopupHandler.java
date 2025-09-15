@@ -74,6 +74,7 @@ public class PopupHandler {
             } catch (Exception e) {
                 System.out.println("Error en enfoque directo: " + e.getMessage());
             }
+
             System.out.println("PopupHandler finalizado (método seguro)");
         } catch (Exception e) {
             System.out.println("⚠Error crítico en PopupHandler: " + e.getMessage());

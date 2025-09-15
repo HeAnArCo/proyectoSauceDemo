@@ -78,7 +78,6 @@ public class AddToCartHandler {
         }
     }
 
-
     public boolean verifyProductsAdded() {
         try {
             WebElement cartBadge = wait.until(ExpectedConditions.visibilityOfElementLocated(

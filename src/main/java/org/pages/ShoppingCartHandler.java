@@ -90,7 +90,6 @@ public class ShoppingCartHandler {
             ));
             continueBtn.click();
             System.out.println("Continuado a resumen de compra");
-
         } catch (Exception e) {
             System.out.println("Error al continuar al resumen: " + e.getMessage());
         }
