@@ -1,57 +1,83 @@
-package org.example.tests;
+package org.tests;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.pages.LoginHandler;
+import org.pages.PopupHandler;
+import org.pages.AddToCartHandler;
+import org.pages.ShoppingCartHandler;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        // 1) WebDriverManager (evita manejar chromedriver manualmente)
-        WebDriverManager.chromedriver().setup();
-
-        // 2) ChromeOptions: intentar evitar popup nativo de guardar contraseñas
+public class MainTest {
+    public static void main(String[] args) {
+        // Se configura chrome
         ChromeOptions options = new ChromeOptions();
-        Map<String, Object> prefs = new HashMap<>();
-        prefs.put("credentials_enable_service", false);
-        prefs.put("profile.password_manager_enabled", false);
-        options.setExperimentalOption("prefs", prefs);
+        options.addArguments("--disable-notifications");
         options.addArguments("--disable-save-password-bubble");
-        options.addArguments("--incognito"); // opcional: reduce uso de perfil con contraseñas guardadas
+        options.addArguments("--disable-autofill-keyboard-accessory-view");
+        options.addArguments("--disable-infobars");
+        options.addArguments("--disable-web-security");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--remote-allow-origins=*");
 
-        WebDriver driver = new ChromeDriver(options);
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver-win64\\chromedriver.exe");
 
+        WebDriver driver = null;
         try {
-            driver.get("https://www.saucedemo.com/");
+            driver = new ChromeDriver(options);
             driver.manage().window().maximize();
 
-            // 3) PopupHandler: JS attempt + fallback Robot(ESC)
-            PopupHandler popupHandler = new PopupHandler(driver);
-            popupHandler.closePasswordPopup();
+            System.out.println("Navegador iniciado correctamente");
 
-            // 4) Login (Java)
+            driver.get("https://www.saucedemo.com/");
+            System.out.println("Página cargada: " + driver.getTitle());
+
+            System.out.println("Iniciando proceso de login...");
             LoginHandler loginHandler = new LoginHandler(driver);
             loginHandler.login("standard_user", "secret_sauce");
+            System.out.println("Login completado");
+            Thread.sleep(2000);
 
-            // 5) Add to cart (Java)
-            AddToCartHandler addHandler = new AddToCartHandler(driver);
-            addHandler.addTwoProductsAndAcceptIfAlert();
 
-            // 6) Quedamos con navegador abierto para que observes (ajusta tiempo a tu preferencia)
-            System.out.println("🚀 Flujo finalizado. El navegador queda abierto 10s para inspección...");
-            Thread.sleep(10_000);
+            System.out.println("🪟 Intentando manejar popup...");
+            try {
+                PopupHandler popupHandler = new PopupHandler(driver);
+                popupHandler.closePasswordPopup();
+                System.out.println("Popup manejado");
+            } catch (Exception e) {
+                System.out.println("No se pudo manejar el popup, pero continuando: " + e.getMessage());
+            }
 
-            System.out.println("✅ Proceso completado (no cerrado automáticamente).");
+            System.out.println("🛒 Añadiendo productos al carrito...");
+            AddToCartHandler addToCartHandler = new AddToCartHandler(driver);
+            addToCartHandler.addTwoProducts();
+
+            if (addToCartHandler.verifyProductsAdded()) {
+                System.out.println("Verificación exitosa: Los productos fueron añadidos al carrito");
+            } else {
+                System.out.println("Advertencia: No se pudieron añadir los productos al carrito");
+            }
+
+            Thread.sleep(1000);
+
+            System.out.println("📦 Abriendo carrito...");
+            ShoppingCartHandler cartHandler = new ShoppingCartHandler(driver);
+            cartHandler.completeFullCheckoutProcess("Juan", "Pérez", "28001");
+            System.out.println("Carrito abierto");
+
+            System.out.println("⏳ Esperando 5 segundos antes de cerrar...");
+            Thread.sleep(5000);
 
         } catch (Exception e) {
+            System.out.println("❌ Error durante la ejecución: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            // Si quieres que NO se cierre, comenta la siguiente línea.
-            driver.quit();
-            System.out.println("🔒 Navegador cerrado por Main (comenta driver.quit() si no quieres cerrarlo).");
+            if (driver != null) {
+                System.out.println("🛑 Cerrando navegador...");
+                driver.quit();
+                System.out.println("👋 Ejecución finalizada");
+            }
         }
     }
 }
