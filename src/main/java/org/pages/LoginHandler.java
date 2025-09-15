@@ -10,6 +10,7 @@ import java.time.Duration;
 
 public class LoginHandler {
     private final WebDriver driver;
+
     private final WebDriverWait wait;
 
     public LoginHandler(WebDriver driver) {
